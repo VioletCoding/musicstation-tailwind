@@ -16,9 +16,12 @@ const defaultOpt = {
     duration: 3000
 }
 
-const Toast = (options: ToastProps): ResultParams => {
+const Toast = (message?: string, options?: ToastProps): ResultParams => {
     const container = document.createElement('div')
     const opt = { ...defaultOpt, ...options }
+    if (message) {
+        opt.message = message
+    }
     // 创建vNode
     const vm = createVNode(ToastTemplate, opt)
     render(vm, container)

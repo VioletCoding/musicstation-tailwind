@@ -60,17 +60,19 @@ const rememberMe = ref<boolean>(true)
 
 const handlerLoginBtn = () => {
     if (!username.value || !password.value) {
-        Toast({ message: '请输入用户名密码' })
+        Toast('请输入用户名密码')
         return false
     }
-
     loading.value = true
+
+    setTimeout(() => {
+        Toast('登录成功')
+        loading.value = false
+    }, 500)
 }
 
 const handlerUselessClick = () => {
-    Toast({
-        message: '还没实现'
-    })
+    Toast('还没实现')
 }
 
 
