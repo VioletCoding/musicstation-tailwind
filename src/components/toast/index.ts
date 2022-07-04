@@ -13,7 +13,7 @@ export interface ResultParams {
 
 // 创建默认参数
 const defaultOpt = {
-    duration: 3000
+    duration: 1000
 }
 
 const Toast = (message?: string, options?: ToastProps): ResultParams => {

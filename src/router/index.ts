@@ -1,14 +1,14 @@
-import Index from '@/pages/Index.vue';
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
+import Index from '@/pages/Index.vue'
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 
 const routes: Array<RouteRecordRaw> = [
     {
-        path: '/', name: 'Index', component: Index, redirect: '/login'
+        path: '/', name: 'Index', component: Index
     },
     {
         path: '/login', name: 'Login', component: () => import("@/pages/login/Index.vue")
     },
-];
+]
 
 const router = createRouter({
     history: createWebHashHistory(),

@@ -49,6 +49,7 @@
 
 <script setup lang='ts'>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import Loading from '../../components/loading/Index.vue'
 import Toast from '../../components/toast'
 
@@ -57,6 +58,8 @@ const loading = ref<boolean>(false)
 const username = ref<string>('')
 const password = ref<string>('')
 const rememberMe = ref<boolean>(true)
+
+const router = useRouter()
 
 const handlerLoginBtn = () => {
     if (!username.value || !password.value) {
@@ -68,6 +71,7 @@ const handlerLoginBtn = () => {
     setTimeout(() => {
         Toast('登录成功')
         loading.value = false
+        router.replace('/')
     }, 500)
 }
 
