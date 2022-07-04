@@ -70,7 +70,6 @@ const addData = () => {
 
 
 onMounted(() => {
-
     addData()
 })
 
