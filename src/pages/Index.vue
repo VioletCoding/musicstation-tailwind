@@ -8,7 +8,7 @@
 
         <!-- 这是一个底部的固定播放器 -->
         <div class="h-28 px-2 flex items-center bg-white border-t border-slate-100">
-            <img :src="avatar" alt="" class="w-14 h-14 object-cover rounded-full">
+            <img :src="avatar" alt="" class="w-14 h-14 object-cover rounded-full ring-2 ring-blue-200">
             <div class="ml-2 line-clamp-1 text-sm font-extrabold">Departures~巴拉巴拉巴拉巴拉啦aaaaaaa啊</div>
             <div class="w-20 flex justify-between ml-2">
                 <play-icon class="w-6 h-6 text-black" />
@@ -21,6 +21,7 @@
 <script setup lang='ts'>
 import { MenuAlt3Icon, PlayIcon } from '@heroicons/vue/solid'
 import { onMounted, onUpdated, ref } from 'vue'
+
 const avatar = ref('http://big-bird.buzz:9519/music-station/avatar.jpg')
 
 /**

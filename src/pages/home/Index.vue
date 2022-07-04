@@ -2,8 +2,10 @@
     <div class="w-full p-4">
         <!-- User Info Card -->
         <div class="w-full h-32 bg-white shadow-sm rounded-xl flex flex-col items-center justify-center mt-8 relative">
-            <img :src="avatar" alt="" class="w-20 h-20 rounded-full absolute -top-8 object-cover">
-            <div class="font-semibold text-lg mt-4">薇尔莉特</div>
+            <img :src="avatar" alt="" class="w-20 h-20 rounded-full absolute -top-10 object-cover ring-4 ring-blue-100">
+            <div class="w-full font-semibold text-lg text-center mt-6">薇尔莉特</div>
+            <div class="w-full text-center font-semibold text-xs text-slate-400 line-clamp-2 px-4">
+                这个人很懒，什么也没写这个人很懒，什么也没写这个人很懒，什么也没写这个人很懒，什么也没写这个人很懒，什么也没写这个人很懒，什么也没写</div>
         </div>
 
         <!-- Create Sheets -->
@@ -22,10 +24,11 @@
 
                 <!-- Horizontal sheet card -->
                 <div class="grow overflow-x-hidden">
-                    <div class="flex mb-2" v-for="sheet in sheetList" :key="sheet.name">
+                    <div class="flex mb-2" v-for="sheet in sheetList" :key="sheet.name"
+                        @click="handlerClickSheetCard(sheet.name)">
                         <img :src="avatar" alt="" class="h-16 w-16 rounded-xl mr-4 object-cover">
                         <div class="flex flex-col w-full justify-around py-2">
-                            <div class="font-semibold text-md line-clamp-1">{{ sheet.name }}</div>
+                            <div class="font-extrabold text-sm line-clamp-1">{{ sheet.name }}</div>
                             <div class="text-xs text-slate-500">{{ sheet.count }} 首</div>
                         </div>
                     </div>
@@ -35,7 +38,9 @@
 
         </div>
 
-        <div class="h-4 w-full"></div>
+        <div class="h-4 w-full">
+            <!-- just a placeholder -->
+        </div>
 
     </div>
 </template>
@@ -43,6 +48,7 @@
 <script setup lang='ts'>
 import { DotsVerticalIcon, PlusIcon } from '@heroicons/vue/solid'
 import { onMounted, ref } from 'vue'
+import Toast from '../../components/toast'
 
 const avatar = ref('http://big-bird.buzz:9519/music-station/avatar.jpg')
 
@@ -65,6 +71,10 @@ const addData = () => {
             cover: avatar.value
         })
     }
+}
+
+const handlerClickSheetCard = (name: string) => {
+    Toast('你点击了' + name)
 }
 
 
