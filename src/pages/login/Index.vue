@@ -37,7 +37,6 @@
                     <div>
                         <button type="button" @click="handlerLoginBtn()"
                             class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 focus:ring-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2">
-                            <Loading v-if="loading" />
                             登录
                         </button>
                     </div>
@@ -48,10 +47,9 @@
 </template>
 
 <script setup lang='ts'>
+import { Toast } from 'vant'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import Loading from '../../components/loading/Index.vue'
-import Toast from '../../components/toast'
 
 const loading = ref<boolean>(false)
 
@@ -69,7 +67,7 @@ const handlerLoginBtn = () => {
     loading.value = true
 
     setTimeout(() => {
-        Toast('登录成功')
+        Toast.success('登录成功')
         loading.value = false
         router.replace('/')
     }, 500)

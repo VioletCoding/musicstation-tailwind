@@ -47,8 +47,8 @@
 
 <script setup lang='ts'>
 import { DotsVerticalIcon, PlusIcon } from '@heroicons/vue/solid'
+import { Toast } from 'vant'
 import { onMounted, ref } from 'vue'
-import Toast from '../../components/toast'
 
 const avatar = ref('http://big-bird.buzz:9519/music-station/avatar.jpg')
 

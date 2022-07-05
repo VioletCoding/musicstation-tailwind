@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <router-view />
+  <router-view class="scroll-smooth" />
 </template>
 
 <style>
