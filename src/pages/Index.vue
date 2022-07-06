@@ -7,18 +7,20 @@
 
         <!-- fixed bottom music player -->
         <div class="h-28 px-2 flex items-center bg-white border-t border-slate-100">
-            <img :src="avatar" alt="" class="w-14 h-14 object-cover rounded-full ring-2 ring-blue-200">
-            <div class="ml-2 line-clamp-1 text-sm font-extrabold grow">{{ playingSong.name ? playingSong.name : '没有播放歌曲'
-            }}
+            <div class="grow inline-flex items-center" @click="handlerClickPlayer()">
+                <img :src="avatar" alt="" class="w-14 h-14 object-cover rounded-full ring-2 ring-blue-200">
+                <div class="ml-4 truncate text-md font-extrabold grow">
+                    {{ playingSong.name ? playingSong.name : '没有播放歌曲' }}
+                </div>
             </div>
-            <div class="w-20 flex justify-end ml-2">
-                <play-icon class="w-6 h-6 text-black" />
-                <menu-alt3-icon class="w-6 h-6 text-black ml-4" @click="handlerPlayList()" />
+            <div class="w-20 flex space-x-6 ml-2">
+                <play-icon v-if="!play" class="w-6 h-6 text-black" @click="handlerPlayOrPause()" />
+                <pause-icon v-else class="w-6 h-6 text-black" @click="handlerPlayOrPause()" />
+                <menu-alt3-icon class="w-6 h-6 text-black ml-4" @click="handlerClickPlayList()" />
             </div>
         </div>
 
         <!-- Selected playlist popup -->
-
         <van-popup v-model:show="showPopup" position="bottom" round :style="{ height: '60%' }">
             <div class="w-full h-full p-4 flex flex-col">
 
@@ -36,19 +38,19 @@
                             </svg>
                             <p class="font-semibold text-sm">列表循环</p>
                         </div>
-                        <div class="inline-flex justify-between w-20">
-                            <download-icon class="w-4 h-4 text-gray-400" />
-                            <folder-add-icon class="w-4 h-4 text-gray-400" />
+                        <div class="inline-flex justify-end w-20">
+                            <!-- <download-icon class="w-4 h-4 text-gray-400" />
+                            <folder-add-icon class="w-4 h-4 text-gray-400" /> -->
                             <trash-icon class="w-4 h-4 text-gray-400" @click="handlerRemoveAll()" />
                         </div>
                     </div>
                 </div>
 
                 <!-- Scroll song list -->
-                <div class="grow overflow-y-auto w-full mt-2">
+                <div class="grow overflow-y-auto w-full mt-2 ">
                     <!-- Single song line -->
                     <transition-group name="slide-fade" tag="div">
-                        <div class="flex items-center h-12 justify-between" v-for="song in songList" :key="song.id"
+                        <div class="flex items-center h-12 justify-between " v-for="song in songList" :key="song.id"
                             @click="handlerClickSong(song)">
                             <div
                                 :class="'font-semibold inline-flex items-center ' + (isPlayingSong(song.id) ? 'text-red-500' : '')">
@@ -68,16 +70,15 @@
 </template>
 
 <script setup lang='ts'>
-import { DownloadIcon, FolderAddIcon, TrashIcon, XIcon } from '@heroicons/vue/outline'
-import { ChartBarIcon, MenuAlt3Icon, PlayIcon } from '@heroicons/vue/solid'
-import { Dialog } from 'vant'
+import { PauseIcon, PlayIcon, TrashIcon, XIcon } from '@heroicons/vue/outline'
+import { ChartBarIcon, MenuAlt3Icon } from '@heroicons/vue/solid'
+import { Dialog, Toast } from 'vant'
 import { onMounted, onUpdated, ref } from 'vue'
 
 const avatar = ref('http://big-bird.buzz:9519/music-station/avatar.jpg')
-
 const showPopup = ref(false)
-
 const playingSong = ref<any>({})
+const play = ref(false)
 
 /**
  * 点击想播放的歌曲时
@@ -86,19 +87,28 @@ const playingSong = ref<any>({})
 const handlerClickSong = (song: object) => {
     playingSong.value = song
     showPopup.value = false
+    play.value = true
 }
-
+/**
+ * 是否为正在播放的歌曲
+ * @param  id 歌曲id
+ */
 const isPlayingSong = (id: string): boolean => {
     return id === playingSong.value.id
 }
-
+/**
+ * 从播放列表删除歌曲
+ * @param song 歌曲
+ */
 const handlerRemoveSong = (song: any) => {
     const index = songList.value.indexOf(song)
     if (index > -1) {
         songList.value.splice(index, 1)
     }
 }
-
+/**
+ * 清空播放列表
+ */
 const handlerRemoveAll = () => {
     if (songList.value.length === 0) {
         return false
@@ -107,9 +117,23 @@ const handlerRemoveAll = () => {
         message: '确定要清空播放列表嘛?',
         theme: 'round-button',
         confirmButtonColor: '#ef4444',
-        cancelButtonColor: 'gray'
+        cancelButtonColor: '#3778e1'
     }).then(() => songList.value = []).catch(() => { })
 
+}
+/**
+ * 点击播放或暂停按钮时，控制歌曲播放暂停
+ */
+const handlerPlayOrPause = () => {
+    if (playingSong.value.name) {
+        play.value = !play.value
+    }
+}
+/**
+ * 点击底部播放器的非操作按钮区域时
+ */
+const handlerClickPlayer = () => {
+    Toast('你干嘛')
 }
 
 const songList = ref([{
@@ -140,7 +164,10 @@ const setClientHeight = () => {
     }
 }
 
-const handlerPlayList = () => {
+/**
+ * 点击底部播放器的播放列表按钮时
+ */
+const handlerClickPlayList = () => {
     showPopup.value = true
 }
 
@@ -152,6 +179,7 @@ onMounted(() => {
 onUpdated(() => {
     setClientHeight()
 })
+
 </script>
 <style scoped lang='less'>
 ::-webkit-scrollbar {

@@ -1,19 +1,22 @@
 <template>
     <div class="w-full p-4">
         <!-- User Info Card -->
-        <div class="w-full h-32 bg-white shadow-sm rounded-xl flex flex-col items-center justify-center mt-8 relative">
-            <img :src="avatar" alt="" class="w-20 h-20 rounded-full absolute -top-10 object-cover ring-4 ring-blue-100">
+        <div
+            class="w-full h-32 bg-white drop-shadow-sm rounded-xl flex flex-col items-center justify-center mt-8 relative">
+            <img :src="avatar" alt=""
+                class="w-20 h-20 rounded-full absolute -top-10 object-cover ring-2 ring-offset-2 ring-blue-200">
             <div class="w-full font-semibold text-lg text-center mt-6">薇尔莉特</div>
             <div class="w-full text-center font-semibold text-xs text-slate-400 line-clamp-2 px-4">
-                这个人很懒，什么也没写这个人很懒，什么也没写这个人很懒，什么也没写这个人很懒，什么也没写这个人很懒，什么也没写这个人很懒，什么也没写</div>
+                这个人很懒，什么也没写这个人很懒，什么也没写这个人很懒，什么也没写这个人很懒，什么也没写这个人很懒，什么也没写这个人很懒，什么也没写
+            </div>
         </div>
 
         <!-- Create Sheets -->
-        <div class="grow rounded-xl shadow-sm bg-white p-4 mt-4">
+        <div class="grow rounded-xl drop-shadow-sm bg-white p-4 mt-4">
 
             <div class="w-full h-6 flex justify-between mb-4">
                 <div class="font-semibold text-sm text-slate-400">创建歌单（{{ sheetList.length }}个）</div>
-                <div class="flex w-16 justify-between">
+                <div class="flex w-16 space-x-4">
                     <plus-icon class="h-6 w-6 text-slate-400" />
                     <dots-vertical-icon class="h-6 w-6 text-slate-400" />
                 </div>
