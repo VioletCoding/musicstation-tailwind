@@ -64,6 +64,12 @@
 
             </div>
         </van-popup>
+
+
+        <van-popup v-model:show="fullScreenPlayer" position="bottom" :style="{ height: '100%' }">
+            <full-screen-player @minimal-player="minimalPlayer()" />
+        </van-popup>
+
     </div>
 
 </template>
@@ -71,13 +77,15 @@
 <script setup lang='ts'>
 import { PauseIcon, PlayIcon, TrashIcon, XIcon } from '@heroicons/vue/outline'
 import { ChartBarIcon, MenuAlt3Icon } from '@heroicons/vue/solid'
-import { Dialog, Toast } from 'vant'
+import { Dialog } from 'vant'
 import { onMounted, onUpdated, ref } from 'vue'
+import FullScreenPlayer from '../components/FullScreenPlayer.vue'
 
 const avatar = ref('http://big-bird.buzz:9519/music-station/avatar.jpg')
 const showPopup = ref(false)
 const playingSong = ref<any>({})
 const play = ref(false)
+const fullScreenPlayer = ref(true)
 
 /**
  * 点击想播放的歌曲时
@@ -132,7 +140,11 @@ const handlerPlayOrPause = () => {
  * 点击底部播放器的非操作按钮区域时
  */
 const handlerClickPlayer = () => {
-    Toast('你干嘛')
+    fullScreenPlayer.value = true
+}
+
+const minimalPlayer = () => {
+    fullScreenPlayer.value = false
 }
 
 const songList = ref([{

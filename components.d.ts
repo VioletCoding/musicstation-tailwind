@@ -7,6 +7,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    FullScreenPlayer: typeof import('./src/components/FullScreenPlayer.vue')['default']
     Index: typeof import('./src/components/loading/Index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
