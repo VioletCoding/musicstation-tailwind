@@ -1,4 +1,4 @@
-import { Popup, Toast } from 'vant'
+import { Lazyload, Popup, Toast } from 'vant'
 import 'vant/es/dialog/style'
 import 'vant/es/toast/style'
 import { createApp } from 'vue'
@@ -10,6 +10,7 @@ import store from './store'
 createApp(App)
     .use(Toast)
     .use(Popup)
+    .use(Lazyload, { lazyComponent: true })
     .use(router)
     .use(store)
     .mount('#app')

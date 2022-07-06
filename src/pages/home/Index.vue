@@ -6,7 +6,7 @@
             <img :src="avatar" alt=""
                 class="w-20 h-20 rounded-full absolute -top-10 object-cover ring-2 ring-offset-2 ring-blue-200">
             <div class="w-full font-semibold text-lg text-center mt-6">薇尔莉特</div>
-            <div class="w-full text-center font-semibold text-xs text-slate-400 line-clamp-2 px-4">
+            <div class="w-full text-center font-semibold text-xs text-gray-400 line-clamp-2 px-4">
                 这个人很懒，什么也没写这个人很懒，什么也没写这个人很懒，什么也没写这个人很懒，什么也没写这个人很懒，什么也没写这个人很懒，什么也没写
             </div>
         </div>
@@ -15,10 +15,10 @@
         <div class="grow rounded-xl drop-shadow-sm bg-white p-4 mt-4">
 
             <div class="w-full h-6 flex justify-between mb-4">
-                <div class="font-semibold text-sm text-slate-400">创建歌单（{{ sheetList.length }}个）</div>
+                <div class="font-semibold text-sm text-gray-400">创建歌单（{{ sheetList.length }}个）</div>
                 <div class="flex w-16 space-x-4">
-                    <plus-icon class="h-6 w-6 text-slate-400" />
-                    <dots-vertical-icon class="h-6 w-6 text-slate-400" />
+                    <plus-icon class="h-6 w-6 text-gray-400" />
+                    <dots-vertical-icon class="h-6 w-6 text-gray-400" />
                 </div>
             </div>
 
@@ -28,11 +28,11 @@
                 <!-- Horizontal sheet card -->
                 <div class="grow overflow-x-hidden">
                     <div class="flex mb-2" v-for="sheet in sheetList" :key="sheet.name"
-                        @click="handlerClickSheetCard(sheet.name)">
+                        @click="handlerClickSheetCard(sheet.name)" v-lazy>
                         <img :src="avatar" alt="" class="h-16 w-16 rounded-xl mr-4 object-cover">
                         <div class="flex flex-col w-full justify-around py-2">
                             <div class="font-extrabold text-sm line-clamp-1">{{ sheet.name }}</div>
-                            <div class="text-xs text-slate-500">{{ sheet.count }} 首</div>
+                            <div class="text-xs text-gray-400">{{ sheet.count }} 首</div>
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@ const sheetList = ref(
 )
 
 const addData = () => {
-    for (let i = 1; i < 10; i++) {
+    for (let i = 1; i < 20; i++) {
         const random = Math.round(Math.random() * 100)
         sheetList.value.push({
             count: random,
