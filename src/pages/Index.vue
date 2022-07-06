@@ -67,7 +67,7 @@
 
 
         <van-popup v-model:show="fullScreenPlayer" position="bottom" :style="{ height: '100%' }">
-            <full-screen-player @minimal-player="minimalPlayer()" />
+            <full-screen-player @minimal-player="minimalPlayer()" @play-change="handlerPlayChange" :playing="play" />
         </van-popup>
 
     </div>
@@ -145,6 +145,10 @@ const handlerClickPlayer = () => {
 
 const minimalPlayer = () => {
     fullScreenPlayer.value = false
+}
+
+const handlerPlayChange = (playStatus: boolean) => {
+    play.value = !playStatus
 }
 
 const songList = ref([{
