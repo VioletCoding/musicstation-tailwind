@@ -50,10 +50,9 @@
                 <div class="grow overflow-y-auto w-full mt-2 ">
                     <!-- Single song line -->
                     <transition-group name="slide-fade" tag="div">
-                        <div class="flex items-center h-12 justify-between " v-for="song in songList" :key="song.id"
-                            @click="handlerClickSong(song)">
-                            <div
-                                :class="'font-semibold inline-flex items-center ' + (isPlayingSong(song.id) ? 'text-red-500' : '')">
+                        <div class="flex items-center h-12 justify-between " v-for="song in songList" :key="song.id">
+                            <div :class="'font-semibold inline-flex items-center ' + (isPlayingSong(song.id) ? 'text-red-500' : '')"
+                                @click="handlerClickSong(song)">
                                 <chart-bar-icon v-if="isPlayingSong(song.id)" class="w-4 h-4 text-red-500 mr-2" />
                                 <div>{{ song.name }}</div>
                                 <div class="text-sm text-gray-400 font-normal">&nbsp;-&nbsp;{{ song.singer }}</div>
