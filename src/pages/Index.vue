@@ -7,21 +7,21 @@
 
         <!-- fixed bottom music player -->
         <div class="h-28 px-2 flex items-center bg-white border-t border-slate-100">
-            <div class="grow inline-flex items-center" @click="handlerClickPlayer()">
+            <div class="grow inline-flex items-center" @click="clickPlayer()">
                 <img :src="avatar" alt="" class="w-14 h-14 object-cover rounded-full ring-2 ring-blue-200">
                 <div class="ml-4 truncate text-md font-extrabold grow">
-                    {{ playingSong.name ? playingSong.name : '没有播放歌曲' }}
+                    {{ playingSong ? playingSong.name : '没有播放歌曲' }}
                 </div>
             </div>
             <div class="w-20 flex space-x-6 ml-2">
-                <play-icon v-if="!play" class="w-6 h-6 text-black" @click="handlerPlayOrPause()" />
-                <pause-icon v-else class="w-6 h-6 text-black" @click="handlerPlayOrPause()" />
-                <menu-alt3-icon class="w-6 h-6 text-black ml-4" @click="handlerClickPlayList()" />
+                <play-icon v-if="!playingState" class="w-6 h-6 text-black" @click="commitPlayingState()" />
+                <pause-icon v-else class="w-6 h-6 text-black" @click="commitPlayingState()" />
+                <menu-alt3-icon class="w-6 h-6 text-black ml-4" @click="clickPlaylistIcon()" />
             </div>
         </div>
 
         <!-- Selected playlist popup -->
-        <van-popup v-model:show="showPopup" position="bottom" round :style="{ height: '60%' }">
+        <van-popup v-model:show="showPlaylistPopup" position="bottom" round :style="{ height: '60%' }">
             <div class="w-full h-full p-4 flex flex-col">
 
                 <div class="h-16 w-full">
@@ -41,7 +41,7 @@
                         <div class="inline-flex justify-end w-20">
                             <!-- <download-icon class="w-4 h-4 text-gray-400" />
                             <folder-add-icon class="w-4 h-4 text-gray-400" /> -->
-                            <trash-icon class="w-4 h-4 text-gray-400" @click="handlerRemoveAll()" />
+                            <trash-icon class="w-4 h-4 text-gray-400" @click="clearPlaylist()" />
                         </div>
                     </div>
                 </div>
@@ -52,12 +52,12 @@
                     <transition-group name="slide-fade" tag="div">
                         <div class="flex items-center h-12 justify-between " v-for="song in songList" :key="song.id">
                             <div :class="'font-semibold inline-flex items-center ' + (isPlayingSong(song.id) ? 'text-red-500' : '')"
-                                @click="handlerClickSong(song)">
+                                @click="clickSong(song)">
                                 <chart-bar-icon v-if="isPlayingSong(song.id)" class="w-4 h-4 text-red-500 mr-2" />
                                 <div>{{ song.name }}</div>
                                 <div class="text-sm text-gray-400 font-normal">&nbsp;-&nbsp;{{ song.singer }}</div>
                             </div>
-                            <x-icon class="w-4 h-4 text-gray-400" @click="handlerRemoveSong(song)" />
+                            <x-icon class="w-4 h-4 text-gray-400" @click="removeSongFromPlaylist(song)" />
                         </div>
                     </transition-group>
                 </div>
@@ -66,8 +66,8 @@
         </van-popup>
 
 
-        <van-popup v-model:show="fullScreenPlayer" position="bottom" :style="{ height: '100%' }">
-            <full-screen-player @minimal-player="minimalPlayer()" />
+        <van-popup v-model:show="showFullScreenPlayer" position="bottom" :style="{ height: '100%' }">
+            <full-screen-player @minimal-player="minimalPlayer()" @play-change="commitPlayingState()" />
         </van-popup>
 
     </div>
@@ -78,36 +78,47 @@
 import { PauseIcon, PlayIcon, TrashIcon, XIcon } from '@heroicons/vue/outline'
 import { ChartBarIcon, MenuAlt3Icon } from '@heroicons/vue/solid'
 import { Dialog } from 'vant'
-import { onMounted, onUpdated, ref } from 'vue'
+import { computed, onMounted, onUpdated, ref } from 'vue'
+import { useStore } from 'vuex'
 import FullScreenPlayer from '../components/FullScreenPlayer.vue'
-
-const avatar = ref('http://big-bird.buzz:9519/music-station/avatar.jpg')
-const showPopup = ref(false)
-const playingSong = ref<any>({})
-const play = ref(false)
-const fullScreenPlayer = ref(true)
+import { Song } from '../types/song'
+// the store
+const store = useStore()
+// test avatar
+const avatar = ref<string>('http://big-bird.buzz:9519/music-station/avatar.jpg')
+// 是否显示播放列表弹出层
+const showPlaylistPopup = ref<boolean>(false)
+// 正在播放的歌曲
+const playingSong = computed<Song>((): Song => store.state.playingSongInfo)
+// 是否显示全屏播放器
+const showFullScreenPlayer = ref<boolean>(false)
+// 从vuex里获取歌曲播放状态，全局同步
+const playingState = computed<boolean>((): boolean => store.state.isSongPlaying)
 
 /**
- * 点击想播放的歌曲时
+ * 点击歌曲
  * @param song 歌曲
  */
-const handlerClickSong = (song: object) => {
-    playingSong.value = song
-    showPopup.value = false
-    play.value = true
+const clickSong = (song: Song): void => {
+    store.commit('changePlayingSongInfo', song)
+    showPlaylistPopup.value = false
+    store.commit('changePlayingState', true)
 }
 /**
  * 是否为正在播放的歌曲
  * @param  id 歌曲id
  */
 const isPlayingSong = (id: string): boolean => {
-    return id === playingSong.value.id
+    if (playingSong.value) {
+        return id === playingSong.value.id
+    }
+    return false
 }
 /**
  * 从播放列表删除歌曲
  * @param song 歌曲
  */
-const handlerRemoveSong = (song: any) => {
+const removeSongFromPlaylist = (song: Song): void => {
     const index = songList.value.indexOf(song)
     if (index > -1) {
         songList.value.splice(index, 1)
@@ -116,9 +127,9 @@ const handlerRemoveSong = (song: any) => {
 /**
  * 清空播放列表
  */
-const handlerRemoveAll = () => {
+const clearPlaylist = (): void => {
     if (songList.value.length === 0) {
-        return false
+        return
     }
     Dialog.confirm({
         message: '确定要清空播放列表嘛?',
@@ -131,29 +142,48 @@ const handlerRemoveAll = () => {
 /**
  * 点击播放或暂停按钮时，控制歌曲播放暂停
  */
-const handlerPlayOrPause = () => {
+const commitPlayingState = (): void => {
     if (playingSong.value.name) {
-        play.value = !play.value
+        commitPlayingStateToStore(!store.state.isSongPlaying)
     }
 }
+
 /**
  * 点击底部播放器的非操作按钮区域时
  */
-const handlerClickPlayer = () => {
-    fullScreenPlayer.value = true
+const clickPlayer = (): void => {
+    showFullScreenPlayer.value = true
 }
 
-const minimalPlayer = () => {
-    fullScreenPlayer.value = false
+/**
+ * 最小化播放器
+ */
+const minimalPlayer = (): void => {
+    showFullScreenPlayer.value = false
 }
 
-const songList = ref([{
+/**
+ * 点击播放列表按钮
+ */
+const clickPlaylistIcon = (): void => {
+    showPlaylistPopup.value = true
+}
+
+/**
+ * 传参的切换状态
+ * @param playStatus 播放状态
+ */
+const commitPlayingStateToStore = (playStatus: boolean): void => {
+    store.commit('changePlayingState', playStatus)
+}
+
+const songList = ref<Song[]>([{
     id: '0',
     name: '哪里都是你',
     singer: '队长'
 }])
 
-const addSong = () => {
+const addSong = (): void => {
     for (let i = 1; i < 20; i++) {
         songList.value.push({
             id: String(i),
@@ -166,7 +196,7 @@ const addSong = () => {
 /**
  * 获取浏览器可视窗口的大小，主要是作用域类似于Safari浏览器底部工具栏的问题（Safari浏览器可以把工具栏设置到底部）
  */
-const setClientHeight = () => {
+const setClientHeight = (): void => {
     const el = document.getElementById('station-wrapper')
     if (el) {
         const h = (document.documentElement.clientHeight) + 'px'
@@ -175,12 +205,6 @@ const setClientHeight = () => {
     }
 }
 
-/**
- * 点击底部播放器的播放列表按钮时
- */
-const handlerClickPlayList = () => {
-    showPopup.value = true
-}
 
 onMounted(() => {
     setClientHeight()
