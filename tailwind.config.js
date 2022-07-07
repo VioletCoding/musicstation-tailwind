@@ -8,6 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
+        // 好看优雅的高清字体
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },
     },

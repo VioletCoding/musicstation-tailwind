@@ -53,7 +53,7 @@ import { DotsVerticalIcon, PlusIcon } from '@heroicons/vue/solid'
 import { Toast } from 'vant'
 import { onMounted, ref } from 'vue'
 
-const avatar = ref('http://big-bird.buzz:9519/music-station/avatar.jpg')
+const avatar = ref<string>('http://big-bird.buzz:9519/music-station/avatar.jpg')
 
 const sheetList = ref(
     [
