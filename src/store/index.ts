@@ -7,7 +7,7 @@ import { Song } from "../types/song"
  */
 export interface State {
     isSongPlaying: boolean,
-    playingSongInfo: Song | null
+    playingSongInfo: Song | null | undefined
 }
 
 // ts 支持

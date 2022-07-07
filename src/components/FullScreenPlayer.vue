@@ -67,22 +67,20 @@ import { ChatIcon, ChevronDownIcon, DotsVerticalIcon, ExternalLinkIcon, HeartIco
 import { HeartIcon as HeaderIconSolid, MenuAlt3Icon } from '@heroicons/vue/solid'
 import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
-
-const store = useStore()
-
+import { State } from '../store'
+const store = useStore<State>()
 const emit = defineEmits(['minimalPlayer', 'playChange'])
 const loveThisSong = ref<boolean>(false)
 const playing = computed<boolean>(() => store.state.isSongPlaying)
-
-const handlerChevronDownIconClick = () => {
+const handlerChevronDownIconClick = (): void => {
     emit('minimalPlayer')
 }
 
-const handlerClickLove = () => {
+const handlerClickLove = (): void => {
     loveThisSong.value = !loveThisSong.value
 }
 
-const handlerPlayChange = () => {
+const handlerPlayChange = (): void => {
     emit('playChange', playing.value)
 }
 

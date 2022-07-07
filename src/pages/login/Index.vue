@@ -59,10 +59,10 @@ const rememberMe = ref<boolean>(true)
 
 const router = useRouter()
 
-const handlerLoginBtn = () => {
+const handlerLoginBtn = (): void => {
     if (!username.value || !password.value) {
         Toast('请输入用户名密码')
-        return false
+        return
     }
     loading.value = true
 
@@ -73,7 +73,7 @@ const handlerLoginBtn = () => {
     }, 500)
 }
 
-const handlerUselessClick = () => {
+const handlerUselessClick = (): void => {
     Toast('还没实现')
 }
 
