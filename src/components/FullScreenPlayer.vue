@@ -22,7 +22,7 @@
         <div class="w-full h-44 flex flex-col justify-between">
             <!-- Operation button -->
             <div class="w-full h-12 flex items-center justify-center space-x-20">
-                <heart-icon v-if="!love" class="w-8 h-8 text-white" @click="handlerClickLove()" />
+                <heart-icon v-if="!loveThisSong" class="w-8 h-8 text-white" @click="handlerClickLove()" />
                 <header-icon-solid v-else class="w-8 h-8 text-red-500" @click="handlerClickLove()" />
                 <chat-icon class="w-8 h-8 text-white" />
                 <dots-vertical-icon class="w-8 h-8 text-white" />
@@ -65,34 +65,26 @@
 
 import { ChatIcon, ChevronDownIcon, DotsVerticalIcon, ExternalLinkIcon, HeartIcon, PauseIcon, PlayIcon } from '@heroicons/vue/outline'
 import { HeartIcon as HeaderIconSolid, MenuAlt3Icon } from '@heroicons/vue/solid'
-import { onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
 
 const emit = defineEmits(['minimalPlayer', 'playChange'])
-const props = defineProps({
-    playing: {
-        type: Boolean,
-        required: true
-    }
-})
-const love = ref(false)
-const playing = ref(props.playing)
+const loveThisSong = ref<boolean>(false)
+const playing = computed<boolean>(() => store.state.isSongPlaying)
 
 const handlerChevronDownIconClick = () => {
     emit('minimalPlayer')
 }
 
 const handlerClickLove = () => {
-    love.value = !love.value
+    loveThisSong.value = !loveThisSong.value
 }
 
 const handlerPlayChange = () => {
-    playing.value = !playing.value
     emit('playChange', playing.value)
 }
-
-onMounted(() => {
-    playing.value = props.playing
-})
 
 </script>
 <style scoped lang='less'>
